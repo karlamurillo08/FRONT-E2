@@ -1,17 +1,17 @@
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Modal, Button } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Modal, Button, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import Icon from './icon';
 import Ajustes from './ajustes';
 import Usuario from './usuario';
 
-const categories = ['Comida', 'Bebida', 'Snacks', 'Dulces'];
+const categories = ['Todo', 'Comida', 'Bebida', 'Snacks', 'Dulces']; // Agregamos "Todo" como categoría
 
 const products = [
   { id: '1', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
   { id: '2', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
   { id: '3', name: 'Burritos', price: '$6.00', categoria: 'Comida', image: require('@/../../assets/burritos.jpeg') },
   { id: '4', name: 'Camarones', price: '$9.50', categoria: 'Comida', image: require('.@/../../assets/camarones.jpeg') },
-  { id: '5', name: 'Cerveza', price: '$3.00' , categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
+  { id: '5', name: 'Cerveza', price: '$3.00', categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
   { id: '6', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
   { id: '7', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
   { id: '8', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
@@ -19,20 +19,22 @@ const products = [
 
 const Inicio = () => {
   const [currentScreen, setCurrentScreen] = useState('Inicio');
-  const [selectedCategory, setSelectedCategory] = useState('Comida'); // Categoría por defecto
+  const [selectedCategory, setSelectedCategory] = useState('Todo'); // Categoría por defecto será "Todo"
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null); // Producto seleccionado para mostrar en el modal
   const [quantity, setQuantity] = useState(1); // Cantidad del producto, empieza desde 1
   const [cart, setCart] = useState([]); // Carrito de compras
+  const [totalPrice, setTotalPrice] = useState(0); // Precio total que se actualiza dinámicamente
 
   // Filtrar productos por la categoría seleccionada
-  const filteredProducts = products.filter(product => product.categoria === selectedCategory);
+  const filteredProducts = selectedCategory === 'Todo' ? products : products.filter(product => product.categoria === selectedCategory);
 
   const renderProduct = ({ item }) => (
     <TouchableOpacity onPress={() => {
       setSelectedProduct(item); // Guardar el producto seleccionado
       setModalVisible(true); // Mostrar el modal
       setQuantity(1); // Restablecer la cantidad a 1 cuando se abre el modal
+      setTotalPrice(parseFloat(item.price.replace('$', ''))); // Establecer el precio total inicial
     }}>
       <View style={styles.productContainer}>
         <Image source={item.image} style={styles.productImage} />
@@ -55,12 +57,20 @@ const Inicio = () => {
 
   const increaseQuantity = () => {
     setQuantity(prevQuantity => prevQuantity + 1);
+    updateTotalPrice(quantity + 1); // Actualizar el precio total
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
+      updateTotalPrice(quantity - 1); // Actualizar el precio total
     }
+  };
+
+  const updateTotalPrice = (newQuantity) => {
+    const productPrice = parseFloat(selectedProduct.price.replace('$', '')); // Extraer el precio numérico del producto
+    const newTotalPrice = productPrice * newQuantity;
+    setTotalPrice(newTotalPrice);
   };
 
   const renderScreen = () => {
@@ -73,19 +83,22 @@ const Inicio = () => {
               <Icon name="shoppingcart" size={28} color="black" />
             </View>
 
-            <View style={styles.categoryContainer}>
-              {categories.map((category, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[styles.categoryButton, selectedCategory === category && styles.selectedCategoryButton]}
-                  onPress={() => setSelectedCategory(category)}
-                >
-                  <Text style={[styles.categoryText, selectedCategory === category && styles.selectedCategoryText]}>
-                    {category}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {/* ScrollView Horizontal para las categorías */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
+              <View style={styles.categoryContainer}>
+                {categories.map((category, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[styles.categoryButton, selectedCategory === category && styles.selectedCategoryButton]}
+                    onPress={() => setSelectedCategory(category)}
+                  >
+                    <Text style={[styles.categoryText, selectedCategory === category && styles.selectedCategoryText]}>
+                      {category}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
 
             <FlatList
               data={filteredProducts} // Filtrar productos
@@ -121,6 +134,9 @@ const Inicio = () => {
                           <Text style={styles.quantityButtonText}>+</Text>
                         </TouchableOpacity>
                       </View>
+
+                      {/* Mostrar total a pagar */}
+                      <Text style={styles.totalText}>Total: ${totalPrice.toFixed(2)}</Text>
 
                       {/* Botón Agregar al carrito */}
                       <TouchableOpacity style={styles.addButton} onPress={handleAddToCart}>
@@ -194,10 +210,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  categoryScroll: {
+    marginBottom: 0, // Reducido para eliminar el espacio extra
+  },
   categoryContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+    height: 40,
   },
   categoryButton: {
     paddingHorizontal: 15,
@@ -205,6 +223,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#007bff',
+    marginRight: 10, // Añadido para un mejor espaciado entre categorías
   },
   selectedCategoryButton: {
     backgroundColor: '#007bff',
@@ -218,6 +237,7 @@ const styles = StyleSheet.create({
   },
   productList: {
     justifyContent: 'space-between',
+    marginTop: 0, // Ajustado para que los productos estén más cerca de las categorías
   },
   productContainer: {
     flex: 1,
@@ -266,6 +286,11 @@ const styles = StyleSheet.create({
   modalProductPrice: {
     fontSize: 20,
     color: 'red',
+    marginBottom: 20,
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   quantityContainer: {
