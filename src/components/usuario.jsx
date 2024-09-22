@@ -1,7 +1,5 @@
-// src/components/usuario.jsx
-
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, FlatList, Button, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, FlatList, Button, SafeAreaView, Platform, StatusBar, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from './icon'; 
 
@@ -45,87 +43,89 @@ const ProfileScreen = ({ goBack }) => { // Agregamos goBack como prop
         <Text style={styles.header}>Usuario</Text>
       </View>
 
-      <View style={styles.container}>
-        <View style={styles.avatarContainer}>
-          <Image 
-            source={{ uri: 'https://images.app.goo.gl/Rpbt3pQPNBgGejdN9' }} 
-            style={styles.avatar} 
-          />
-          <TouchableOpacity style={styles.cameraIcon}>
-            <Icon type="AntDesign" name="camera" size={20} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Nombre</Text>
-          <TextInput 
-            style={styles.input} 
-            placeholder="Juana Perez" 
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Correo</Text>
-          <TextInput 
-            style={styles.input} 
-            placeholder="juanaperez@gmail.com" 
-            keyboardType="email-address"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            onBlur={() => validateEmail(email)}
-          />
-          {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Contraseña</Text>
-          <TextInput 
-            style={styles.input} 
-            placeholder="************" 
-            secureTextEntry 
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Cumpleaños</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
-            <Text>{date.toLocaleDateString()}</Text>
-            <Icon type="AntDesign" name="down" size={20} color="black" />
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onDateChange}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.container}>
+          <View style={styles.avatarContainer}>
+            <Image 
+              source={{ uri: 'https://images.app.goo.gl/Rpbt3pQPNBgGejdN9' }} 
+              style={styles.avatar} 
             />
-          )}
-        </View>
+            <TouchableOpacity style={styles.cameraIcon}>
+              <Icon type="AntDesign" name="camera" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>País</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setShowCountryModal(true)}>
-            <Text>{selectedCountry}</Text>
-            <Icon type="AntDesign" name="down" size={20} color="black" />
-          </TouchableOpacity>
-          <Modal visible={showCountryModal} transparent={true} animationType="slide">
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <FlatList 
-                  data={countries} 
-                  keyExtractor={(item) => item} 
-                  renderItem={renderCountryItem} 
-                />
-                <Button title="Cerrar" onPress={() => setShowCountryModal(false)} />
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Nombre</Text>
+            <TextInput 
+              style={styles.input} 
+              placeholder="Juana Perez" 
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Correo</Text>
+            <TextInput 
+              style={styles.input} 
+              placeholder="juanaperez@gmail.com" 
+              keyboardType="email-address"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              onBlur={() => validateEmail(email)}
+            />
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Contraseña</Text>
+            <TextInput 
+              style={styles.input} 
+              placeholder="************" 
+              secureTextEntry 
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Cumpleaños</Text>
+            <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
+              <Text>{date.toLocaleDateString()}</Text>
+              <Icon type="AntDesign" name="down" size={20} color="black" />
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                onChange={onDateChange}
+              />
+            )}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>País</Text>
+            <TouchableOpacity style={styles.input} onPress={() => setShowCountryModal(true)}>
+              <Text>{selectedCountry}</Text>
+              <Icon type="AntDesign" name="down" size={20} color="black" />
+            </TouchableOpacity>
+            <Modal visible={showCountryModal} transparent={true} animationType="slide">
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <FlatList 
+                    data={countries} 
+                    keyExtractor={(item) => item} 
+                    renderItem={renderCountryItem} 
+                  />
+                  <Button title="Cerrar" onPress={() => setShowCountryModal(false)} />
+                </View>
               </View>
-            </View>
-          </Modal>
-        </View>
+            </Modal>
+          </View>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Guardar Cambios</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Guardar Cambios</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -150,6 +150,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20, // Espacio extra al final del contenido
   },
   container: {
     flex: 1,
