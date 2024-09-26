@@ -4,25 +4,13 @@ import Icon from './icon';
 import Ajustes from './ajustes';
 import Usuario from './usuario';
 
-const categories = ['Todo', 'Comida', 'Bebida', 'Snacks', 'Dulces']; // Agregamos "Todo" como categoría
+const categories = ['Todo', 'Muebles', 'Ropa', 'Belleza', 'Tecnología']; // Agregamos "Todo" como categoría
 
 const products = [
-  { id: '1', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '2', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
-  { id: '3', name: 'Burritos', price: '$6.00', categoria: 'Comida', image: require('@/../../assets/burritos.jpeg') },
-  { id: '4', name: 'Camarones', price: '$9.50', categoria: 'Comida', image: require('.@/../../assets/camarones.jpeg') },
-  { id: '5', name: 'Cerveza', price: '$3.00', categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '6', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
-  { id: '7', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '8', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
-  { id: '1', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '2', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
-  { id: '3', name: 'Burritos', price: '$6.00', categoria: 'Comida', image: require('@/../../assets/burritos.jpeg') },
-  { id: '4', name: 'Camarones', price: '$9.50', categoria: 'Comida', image: require('.@/../../assets/camarones.jpeg') },
-  { id: '5', name: 'Cerveza', price: '$3.00', categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '6', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
-  { id: '7', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '8', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
+  { id: '1', name: 'Celular', price: '$165.00', categoria: 'Tecnología', image: require('@/../../assets/celular') },
+  { id: '2', name: 'Reloj', price: '$45.00', categoria: 'Tecnología', image: require('@/../../assets/reloj') },
+  { id: '1', name: 'Celular', price: '$165.00', categoria: 'Tecnología', image: require('@/../../assets/re') },
+  
 
 ];
 
