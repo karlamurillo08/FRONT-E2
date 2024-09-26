@@ -15,14 +15,14 @@ const products = [
   { id: '6', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
   { id: '7', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
   { id: '8', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
-  { id: '1', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '2', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
-  { id: '3', name: 'Burritos', price: '$6.00', categoria: 'Comida', image: require('@/../../assets/burritos.jpeg') },
-  { id: '4', name: 'Camarones', price: '$9.50', categoria: 'Comida', image: require('.@/../../assets/camarones.jpeg') },
-  { id: '5', name: 'Cerveza', price: '$3.00', categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '6', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
-  { id: '7', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
-  { id: '8', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
+  { id: '9', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
+  { id: '10', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
+  { id: '11', name: 'Burritos', price: '$6.00', categoria: 'Comida', image: require('@/../../assets/burritos.jpeg') },
+  { id: '12', name: 'Camarones', price: '$9.50', categoria: 'Comida', image: require('.@/../../assets/camarones.jpeg') },
+  { id: '13', name: 'Cerveza', price: '$3.00', categoria: 'Bebida', image: require('@/../../assets/hamburguesa.jpg') },
+  { id: '14', name: 'Refresco', price: '$2.50', categoria: 'Bebida', image: require('@/../../assets/tacos.jpg') },
+  { id: '15', name: 'Papas Fritas', price: '$1.50', categoria: 'Snacks', image: require('@/../../assets/hamburguesa.jpg') },
+  { id: '16', name: 'Chocolates', price: '$2.00', categoria: 'Dulces', image: require('@/../../assets/tacos.jpg') },
 
 ];
 
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     height: 40,
+    paddingVertical: 5,
   },
   categoryButton: {
     paddingHorizontal: 15,
