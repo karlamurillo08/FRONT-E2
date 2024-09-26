@@ -7,10 +7,22 @@ import Usuario from './usuario';
 const categories = ['Todo', 'Muebles', 'Ropa', 'Belleza', 'Tecnología']; // Agregamos "Todo" como categoría
 
 const products = [
-  { id: '1', name: 'Celular', price: '$165.00', categoria: 'Tecnología', image: require('@/../../assets/celular') },
-  { id: '2', name: 'Reloj', price: '$45.00', categoria: 'Tecnología', image: require('@/../../assets/reloj') },
-  { id: '1', name: 'Celular', price: '$165.00', categoria: 'Tecnología', image: require('@/../../assets/re') },
+
+  { id: '1', name: 'Hamburguesa', price: '$7.50', categoria: 'Comida', image: require('@/../../assets/hamburguesa.jpg') },
+  { id: '2', name: 'Tacos de birria', price: '$8.00', categoria: 'Comida', image: require('@/../../assets/tacos.jpg') },
+  { id: '3', name: 'Celular Iphone', price: '$165.00', categoria: 'Tecnología', image: require('@/../../assets/celular.jpg' )},
+  { id: '4', name: 'Reloj rosa', price: '$45.00', categoria: 'Tecnología', image: require('@/../../assets/reloj.webp') },
+  { id: '5', name: 'Reloj negro', price: '$49.00', categoria: 'Tecnología', image: require('@/../../assets/relojnegro.webp') },
+  { id: '6', name: 'Celular Samsung', price: '$199.00', categoria: 'Tecnología', image: require('@/../../assets/Celular-Samsung.webp') },
+  { id: '6', name: 'Celular motorola', price: '$105.00', categoria: 'Tecnología', image: require('@/../../assets/motorola.webp') },
+  { id: '7', name: 'Celular Huawei', price: '$115.00', categoria: 'Tecnología', image: require('@/../../assets/huawei.webp') },
   
+
+
+
+
+
+
 
 ];
 
@@ -213,6 +225,7 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     height: 40,
+    paddingVertical: 5,
   },
   categoryButton: {
     paddingHorizontal: 15,
