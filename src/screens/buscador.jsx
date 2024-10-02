@@ -1,11 +1,8 @@
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Modal, Button, ScrollView } from 'react-native';
 import React, { useState } from 'react';
+import { Text, View, ScrollView, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, FlatList, Modal, Button, Image } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import Icon from './icon';
-import Ajustes from './ajustes';
-import Usuario from './usuario';
-import Buscador from './buscador';
-
-const categories = ['Todo', 'Muebles', 'Calzado', 'Belleza', 'Tecnología']; // Agregamos "Todo" como categoría
+import Carrito from './carrito'; // Importar el componente de carrito
 
 const products = [
   { id: '1', name: 'Smart band', price: '$45.00', categoria: 'Tecnología', image: require('@/../../assets/smartband.webp') },
@@ -70,17 +67,25 @@ const products = [
   { id: '50', name: 'Super Smooth', price: '$6.99', categoria: 'Belleza', image: require('@/../../assets/lapiz.webp') },
 ];
 
-const Inicio = () => {
-  const [currentScreen, setCurrentScreen] = useState('Inicio');
-  const [selectedCategory, setSelectedCategory] = useState('Todo'); // Categoría por defecto será "Todo"
-  const [modalVisible, setModalVisible] = useState(false);
+
+const Buscador = () => {
+  const [searchKey, setSearchKey] = useState('');
+  const [currentScreen, setCurrentScreen] = useState('Buscador');
   const [selectedProduct, setSelectedProduct] = useState(null); // Producto seleccionado para mostrar en el modal
   const [quantity, setQuantity] = useState(1); // Cantidad del producto, empieza desde 1
   const [cart, setCart] = useState([]); // Carrito de compras
+  const [modalVisible, setModalVisible] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0); // Precio total que se actualiza dinámicamente
 
-  // Filtrar productos por la categoría seleccionada
-  const filteredProducts = selectedCategory === 'Todo' ? products : products.filter(product => product.categoria === selectedCategory);
+  // Función para filtrar productos basados en la búsqueda
+  const handleSearch = (text) => {
+    setSearchKey(text);
+  };
+
+  // Filtrar productos por búsqueda
+  const filteredProducts = products.filter((product) => {
+    return product.name.toLowerCase().includes(searchKey.toLowerCase());
+  });
 
   const renderProduct = ({ item }) => (
     <TouchableOpacity onPress={() => {
@@ -128,31 +133,9 @@ const Inicio = () => {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'Inicio':
+      case 'Buscador':
         return (
           <View style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>Productos</Text>
-              <Icon name="shoppingcart" size={28} color="black" />
-            </View>
-
-            {/* ScrollView Horizontal para las categorías */}
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-              <View style={styles.categoryContainer}>
-                {categories.map((category, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[styles.categoryButton, selectedCategory === category && styles.selectedCategoryButton]}
-                    onPress={() => setSelectedCategory(category)}
-                  >
-                    <Text style={[styles.categoryText, selectedCategory === category && styles.selectedCategoryText]}>
-                      {category}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-
             <FlatList
               data={filteredProducts} // Filtrar productos
               renderItem={renderProduct}
@@ -202,201 +185,234 @@ const Inicio = () => {
                 </View>
               </View>
             </Modal>
-
           </View>
         );
-      case 'Ajustes':
-        return <Ajustes />;
-      case 'Usuario':
-        return <Usuario />;
-      case 'Buscador':
-        return <Buscador />;
+      case 'Carrito':
+        return <Carrito cart={cart} setCart={setCart} />; // Mostrar carrito
       default:
-        return (
-          <View style={styles.container}>
-            <Text style={styles.contentText}>Contenido de la aplicación</Text>
-          </View>
-        );
+        return null;
     }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
-      <View style={{ flex: 1 }}>{renderScreen()}</View>
-      <View style={styles.navbar}>
-        <TouchableOpacity onPress={() => setCurrentScreen('Inicio')}>
-          <Icon type="AntDesign" name="home" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCurrentScreen('Buscador')}>
-          <Icon type="AntDesign" name="search1" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCurrentScreen('Usuario')}>
-          <Icon type="AntDesign" name="user" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Cart Pressed')}>
-          <Icon type="AntDesign" name="shoppingcart" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCurrentScreen('Ajustes')}>
-          <Icon type="AntDesign" name="setting" size={30} color="black" />
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            value={searchKey}
+            onChangeText={handleSearch}
+            placeholder='¿Qué quieres buscar?'
+          />
+        </View>
+        <View style={styles.searchIconContainer}>
+          <Feather name='search' size={24} style={styles.searchIcon} />
+        </View>
       </View>
-    </SafeAreaView>
+
+      {/* Renderiza la pantalla seleccionada */}
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" />
+        <View style={{ flex: 1 }}>{renderScreen()}</View>
+      </SafeAreaView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
+styles = StyleSheet.create({
+  container:{
+      flex:1,
+      alignItems: 'center',
+      justifyContent: 'center',
   },
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
+  searchContainer:{
+      marginHorizontal: 12,
+      flexDirection:"row",
+      justifyContent:'center',
+      alignContent:"center",
+      backgroundColor:"#A9D6E5",
+      borderRadius: 14,
+      marginVertical:"",
+      height: 50,
+      marginTop: 15
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
+  searchIconContainer: {
+      backgroundColor: "#013A63",
+      width: 50,
+      height: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 14,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#013A63',
+  searchIcon:{
+      color:"white",
+  },
+  searchWrapper:{
+      flex:1,
+      backgroundColor:"#A9D6E5",
+      marginLeft: 30,
+      borderRadius: 10,
+  },
+  searchInput:{
+      width:"100%",
+      height:"100%",
+      paddingHorizontal:"",
+  },
 
-  },
-  categoryScroll: {
-    marginBottom: 0, // Reducido para eliminar el espacio extra
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    height: 40,
-    paddingVertical: 5,
-  },
-  categoryButton: {
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#012A4A',
-    marginRight: 10, // Añadido para un mejor espaciado entre categorías
-  },
-  selectedCategoryButton: {
-    backgroundColor: '#012A4A',
-  },
-  categoryText: {
-    fontSize: 16,
-    color: '#2C7DA0',
-  },
-  selectedCategoryText: {
-    color: '#fff',
-  },
-  productList: {
-    justifyContent: 'space-between',
-    marginTop: 0, // Ajustado para que los productos estén más cerca de las categorías
-  },
-  productContainer: {
-    flex: 1,
-    margin: 10,
-    alignItems: 'center', // Centrar los elementos
-    justifyContent: 'center', // Asegura que se distribuyan bien
-  },
-  productImage: {
-    width: 80, // Ajustado para mostrar 3 productos por fila
-    height: 80, // Ajustado para mostrar 3 productos por fila
-    borderRadius: 10,
-  },
-  productName: {
-    fontSize: 14, // Ajustado para el tamaño de los productos
-    fontWeight: 'bold',
-    marginTop: 5,
-  },
-  productPrice: {
-    fontSize: 14, // Ajustado para el tamaño de los productos
-    color: 'red',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
-  },
-  modalContent: {
-    backgroundColor: '#fff', // Fondo blanco
-    padding: 20,
-    width: '80%',
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  modalProductName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  modalProductPrice: {
-    fontSize: 20,
-    color: 'red',
-    marginBottom: 20,
-  },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  quantityButton: {
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 10,
-  },
-  quantityButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  quantityText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  addButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  navbar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-  },
-  contentText: {
-    fontSize: 18,
-    color: '#333',
-  },
-  columnWrapper: {
-    justifyContent: 'space-between', // Esto asegura que las columnas estén correctamente alineadas
-  },
+  ////////////////////
+
+  safeArea: {
+      flex: 1,
+      backgroundColor: '#fff',
+    },
+    container: {
+      flex: 1,
+      padding: 10,
+      backgroundColor: '#fff',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 10,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#013A63',
+  
+    },
+    categoryScroll: {
+      marginBottom: 0, // Reducido para eliminar el espacio extra
+    },
+    categoryContainer: {
+      flexDirection: 'row',
+      height: 40,
+      paddingVertical: 5,
+    },
+    categoryButton: {
+      paddingHorizontal: 15,
+      paddingVertical: 5,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: '#012A4A',
+      marginRight: 10, // Añadido para un mejor espaciado entre categorías
+    },
+    selectedCategoryButton: {
+      backgroundColor: '#012A4A',
+    },
+    categoryText: {
+      fontSize: 16,
+      color: '#2C7DA0',
+    },
+    selectedCategoryText: {
+      color: '#fff',
+    },
+    productList: {
+      justifyContent: 'space-between',
+      marginTop: 0, // Ajustado para que los productos estén más cerca de las categorías
+    },
+    productContainer: {
+      flex: 1,
+      margin: 10,
+      alignItems: 'center', // Centrar los elementos
+      justifyContent: 'center', // Asegura que se distribuyan bien
+    },
+    productImage: {
+      width: 80, // Ajustado para mostrar 3 productos por fila
+      height: 80, // Ajustado para mostrar 3 productos por fila
+      borderRadius: 10,
+    },
+    productName: {
+      fontSize: 14, // Ajustado para el tamaño de los productos
+      fontWeight: 'bold',
+      marginTop: 5,
+    },
+    productPrice: {
+      fontSize: 14, // Ajustado para el tamaño de los productos
+      color: 'red',
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
+    },
+    modalContent: {
+      backgroundColor: '#fff', // Fondo blanco
+      padding: 20,
+      width: '80%',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    modalImage: {
+      width: 150,
+      height: 150,
+      borderRadius: 10,
+      marginBottom: 20,
+    },
+    modalProductName: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    modalProductPrice: {
+      fontSize: 20,
+      color: 'red',
+      marginBottom: 20,
+    },
+    totalText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 20,
+    },
+    quantityContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    quantityButton: {
+      backgroundColor: '#ddd',
+      padding: 10,
+      borderRadius: 5,
+      marginHorizontal: 10,
+    },
+    quantityButtonText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    quantityText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    addButton: {
+      backgroundColor: '#007bff',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      marginBottom: 10,
+    },
+    addButtonText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    navbar: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingVertical: 10,
+      borderTopWidth: 1,
+      borderColor: '#ddd',
+      backgroundColor: '#fff',
+    },
+    contentText: {
+      fontSize: 18,
+      color: '#333',
+    },
+    columnWrapper: {
+      justifyContent: 'space-between', // Esto asegura que las columnas estén correctamente alineadas
+    },
 });
 
-export default Inicio;
+
+export default Buscador;
