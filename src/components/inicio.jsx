@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Icon from './icon';
 import Ajustes from './ajustes';
 import Usuario from './usuario';
+import Buscador from './buscador';
 
 const categories = ['Todo', 'Muebles', 'Calzado', 'Belleza', 'Tecnología']; // Agregamos "Todo" como categoría
 
@@ -208,6 +209,8 @@ const Inicio = () => {
         return <Ajustes />;
       case 'Usuario':
         return <Usuario />;
+      case 'Buscador':
+        return <Buscador />;
       default:
         return (
           <View style={styles.container}>
@@ -225,7 +228,7 @@ const Inicio = () => {
         <TouchableOpacity onPress={() => setCurrentScreen('Inicio')}>
           <Icon type="AntDesign" name="home" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Search Pressed')}>
+        <TouchableOpacity onPress={() => setCurrentScreen('Buscador')}>
           <Icon type="AntDesign" name="search1" size={30} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setCurrentScreen('Usuario')}>
