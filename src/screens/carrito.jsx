@@ -20,7 +20,7 @@ const Carrito = ({ cart, setCart }) => {
       <Image source={item.image} style={styles.cartImage} />
       <View style={styles.cartDetails}>
         <Text style={styles.cartItemName}>{item.name}</Text>
-        {/* Asegúrate de que el precio esté limpio y sea un número */}
+        
         <Text style={styles.cartItemPrice}>${parseFloat(item.price.replace('$', '')).toFixed(2)}</Text>
         <View style={styles.quantityContainer}>
           <TouchableOpacity onPress={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity === 1} style={styles.quantityButton}>
